@@ -8,7 +8,6 @@
 # Contributors:
 #   Red Hat, Inc. - initial API and implementation
 
-
 FROM registry.centos.org/centos/centos
 
 MAINTAINER Dharmit Shah <dshah@redhat.com>
