@@ -13,7 +13,7 @@ FROM registry.centos.org/centos/centos
 
 MAINTAINER Dharmit Shah <dshah@redhat.com>
 
-EXPOSE 22 4403
+EXPOSE 22 4403 3000
 
 ARG JAVA_VERSION=1.8.0
 
@@ -21,6 +21,7 @@ ENV JAVA_HOME=/usr/lib/jvm/java-${JAVA_VERSION}
 ENV PATH=$JAVA_HOME/bin:$PATH
 
 RUN yum -y update && \
+    yum groupinstall "Development Tools" -y && \
     yum -y install \
     sudo \
     openssh-server \
@@ -35,7 +36,6 @@ RUN yum -y update && \
     sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config && \
     sed -ri 's/#UsePAM no/UsePAM no/g' /etc/ssh/sshd_config && \
     echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-    # Adding user to the 'root' is a workaround for https://issues.jboss.org/browse/CDK-305
     useradd -u 1000 -G users,wheel,root -d /home/user --shell /bin/bash -m user && \
     usermod -p "*" user && \
     sed -i 's/requiretty/!requiretty/g' /etc/sudoers
